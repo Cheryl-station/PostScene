@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "PostScene"
-version = "0.0.0"
+version = "0.1.0"
 description = "基于 Postman 接口自动化场景设计（Xmind/Yaml -> Postman Collection）"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -29,4 +29,3 @@ include-package-data = true
 
 [tool.setuptools.packages.find]
 include = ["post_scene*"]
-

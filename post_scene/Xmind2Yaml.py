@@ -1,6 +1,4 @@
-import os
 from pathlib import Path
-import xmind
 from ruamel.yaml import YAML
 
 
@@ -60,18 +58,22 @@ class XMindConverter:
 
 def xmind2Yaml(path, file_name):
     """主转换入口"""
+    try:
+        import xmind
+    except ImportError as exc:
+        raise RuntimeError("转换 .xmind 文件需要安装 XMind 依赖：pip install XMind==1.2.0") from exc
+
     base_path = Path(path).resolve()
     xmind_file = base_path / f"{file_name}.xmind"
     yaml_file = base_path / f"{file_name}.yaml"
 
-    try:
-        workbook = xmind.load(str(xmind_file))
-        root_data = workbook.getPrimarySheet().getRootTopic().getData()
+    workbook = xmind.load(str(xmind_file))
+    root_data = workbook.getPrimarySheet().getRootTopic().getData()
 
-        yaml_data = {}
-        XMindConverter().parse_node(root_data, yaml_data)
+    yaml_data = {}
+    XMindConverter().parse_node(root_data, yaml_data)
 
-        with open(yaml_file, 'w', encoding='UTF-8') as f:
-            YAML().dump(yaml_data, f)
-    except Exception as e:
-        print(f"转换失败: {e}")
+    with open(yaml_file, 'w', encoding='UTF-8') as f:
+        YAML().dump(yaml_data, f)
+
+    return str(yaml_file)

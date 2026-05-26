@@ -52,9 +52,7 @@ class Utils:
             url = request_item['url']
             query = url['query'] if 'query' in url else []
             for name in params_name:
-                param_item = name.popitem()
-                name = param_item[0]
-                value = param_item[1]
+                name, value = next(iter(name.items()))
                 items = [i for i in query if i['key'] == name]
                 if len(items) == 0:
                     query.append({'key': name, 'value': '{{' + value + '}}'})
@@ -67,9 +65,7 @@ class Utils:
                 key = 'urlencoded' if body['mode'] == 'urlencoded' else 'formdata'
                 query = body[key]
                 for name in params_name:
-                    param_item = name.popitem()
-                    name = param_item[0]
-                    value = param_item[1]
+                    name, value = next(iter(name.items()))
                     items = [i for i in query if i['key'] == name]
                     if len(items) == 0:
                         query.append({'key': name, 'value': '{{' + value + '}}', "type": "text"})
@@ -81,13 +77,11 @@ class Utils:
                 try:
                     json_data = json.loads(raw)
                     for name in params_name:
-                        param_item = name.popitem()
-                        name = param_item[0]
-                        value = param_item[1]
+                        name, value = next(iter(name.items()))
                         Utils.parse_json_params(json_data, name, value)
                     body['raw'] = json.dumps(json_data, indent=4)
-                except Exception as e:
-                    print(e)
+                except Exception:
+                    return request_item
         return request_item
 
     @staticmethod

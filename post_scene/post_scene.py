@@ -3,7 +3,6 @@ import logging
 from pathlib import Path
 from ruamel.yaml import YAML
 import requests
-from post_scene.Xmind2Yaml import xmind2Yaml
 from post_scene.creator import PostmanJson
 from post_scene.parser import Utils, Parse
 
@@ -54,13 +53,22 @@ class PostScene:
     @staticmethod
     def generate(yaml_path, postman_data_path, scene_dirs='../scene'):
         """执行生成流程"""
-        with open(yaml_path, 'r', encoding='utf-8') as f:
+        yaml_file = Path(yaml_path)
+        if not yaml_file.exists():
+            raise FileNotFoundError(f"场景脚本不存在: {yaml_path}")
+
+        with open(yaml_file, 'r', encoding='utf-8') as f:
             script = YAML().load(f)
+
+        if not isinstance(script, dict) or 'name' not in script or 'scene' not in script:
+            raise ValueError("场景脚本必须包含 name 和 scene 字段")
 
         scenes = Parse.parse_scene(script['scene'])
         postman_data = PostScene.check_postman_url(postman_data_path)
         if not postman_data:
             return None
+        if 'item' not in postman_data:
+            raise ValueError("Postman collection 缺少 item 字段")
 
         new_collection = {
             "info": PostmanJson.create_info(script['name']),
@@ -85,12 +93,15 @@ class PostScene:
     def covert(script_path, postman_data_path, scene_dirs='./scene'):
         """统一转换入口"""
         path_obj = Path(script_path)
-        if script_path.endswith('.yaml'):
+        suffix = path_obj.suffix.lower()
+        if suffix in ('.yaml', '.yml'):
             return PostScene.generate(script_path, postman_data_path, scene_dirs)
-        elif script_path.endswith('.xmind'):
+        elif suffix == '.xmind':
+            from post_scene.Xmind2Yaml import xmind2Yaml
+
             xmind2Yaml(str(path_obj.parent), path_obj.stem)
             return PostScene.generate(str(path_obj.with_suffix('.yaml')), postman_data_path, scene_dirs)
-        raise ValueError("script_path 仅支持 .yaml 或 .xmind")
+        raise ValueError("script_path 仅支持 .yaml、.yml 或 .xmind")
 
     @staticmethod
     def convert(script_path, postman_data_path, scene_dirs='./scene'):

@@ -11,7 +11,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument(
         "script",
-        help="脚本路径，支持 .yaml 或 .xmind",
+        help="脚本路径，支持 .yaml、.yml 或 .xmind",
     )
     p.add_argument(
         "postman",
@@ -28,7 +28,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    out = PostScene.convert(args.script, args.postman, args.out_dir)
+    try:
+        out = PostScene.convert(args.script, args.postman, args.out_dir)
+    except Exception as exc:
+        print(f"生成失败：{exc}", file=sys.stderr)
+        return 2
     if not out:
         print("生成失败：未能加载 Postman 源数据或脚本解析失败。", file=sys.stderr)
         return 2
@@ -38,4 +42,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

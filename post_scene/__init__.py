@@ -9,4 +9,4 @@ PostScene 包入口。
 from .post_scene import PostScene
 
 __all__ = ["PostScene"]
-__version__ = "0.0.0"
+__version__ = "0.1.0"

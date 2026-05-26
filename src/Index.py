@@ -18,7 +18,7 @@ def main():
     print("🚀 PostScene 启动转换与生成...")
     try:
         # 使用统一入口进行转换
-        PostScene.covert(
+        PostScene.convert(
             script_path=str(YAML_PATH),
             postman_data_path=str(API_DOC_PATH),
             scene_dirs=str(BASE_DIR / 'src' / 'scene')

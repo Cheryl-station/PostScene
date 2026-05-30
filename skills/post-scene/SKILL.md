@@ -10,13 +10,35 @@ Use this skill to help users recommend business-oriented YAML scenarios from Pos
 ## Workflow
 
 1. Identify the Postman API document source: a local collection JSON file or a Postman share URL.
-2. If the user asks for a useful first draft, generate recommended business scenarios with `scripts/postscene_suggest.py`.
-3. If the user asks only for a neutral skeleton, generate a simple YAML template with `scripts/postscene_template.py`.
-4. Help the user adjust the generated YAML scenario order, parameters, assertions, variable extraction, and `ref` links.
-5. Before converting, lint the YAML against the Postman collection with `scripts/postscene_lint.py`.
-6. When a scenario script is valid enough to proceed, convert it with `scripts/postscene.py`.
-7. Choose an output directory, defaulting to `./scene` when the user does not specify one.
-8. After conversion, tell the user the generated collection path and any warnings or errors.
+2. Prefer `scripts/postscene_auto.py` when the user wants a complete first pass from a Postman collection.
+3. If the user asks for a useful YAML draft only, generate recommended business scenarios with `scripts/postscene_suggest.py`.
+4. If the user asks only for a neutral skeleton, generate a simple YAML template with `scripts/postscene_template.py`.
+5. Help the user adjust the generated YAML scenario order, parameters, assertions, variable extraction, and `ref` links.
+6. Before converting hand-edited YAML, lint it against the Postman collection with `scripts/postscene_lint.py`.
+7. When a scenario script is valid enough to proceed, convert it with `scripts/postscene.py`.
+8. Choose an output directory, defaulting to `./scene` when the user does not specify one.
+9. After conversion, tell the user the generated collection path and any warnings or errors.
+
+## Auto Recommend, Lint, And Convert
+
+Run the full first-pass workflow from a Postman collection:
+
+```bash
+python /path/to/post-scene/scripts/postscene_auto.py \
+  path/to/postman_collection.json \
+  -o path/to/output-dir
+```
+
+Strict mode blocks conversion when lint warnings are found:
+
+```bash
+python /path/to/post-scene/scripts/postscene_auto.py \
+  path/to/postman_collection.json \
+  -o path/to/output-dir \
+  --strict
+```
+
+This command writes a recommended YAML draft, lints it, converts it to a Postman scenario collection when lint passes, and saves a `postscene-auto-report.json` file.
 
 ## Recommend Business Scenarios
 

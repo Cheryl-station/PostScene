@@ -69,6 +69,14 @@ postscene-lint ./src/yaml/suggested-scenes.yaml ./src/api_document/demo.postman_
 
 校验会检查步骤名是否存在、`ref` 变量是否有前置保存、`next.requestName` 是否能找到，以及基础断言结构是否可识别。
 
+如果希望一键完成“推荐 YAML → 校验 → 转换”，可以使用：
+
+```bash
+postscene-auto ./src/api_document/demo.postman_collection.json -o ./src/scene
+```
+
+该命令会同时输出推荐 YAML、生成后的 Postman Collection 和自动流程报告。
+
 #### 作为 Codex Skill 安装
 
 本仓库包含可发布的 Codex skill 包，路径为 `skills/post-scene`。可以从 GitHub 仓库路径安装：

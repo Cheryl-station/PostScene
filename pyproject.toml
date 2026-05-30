@@ -18,8 +18,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yajuntang/PostScene"
-Repository = "https://github.com/yajuntang/PostScene"
+Homepage = "https://github.com/Cheryl-station/PostScene"
+Repository = "https://github.com/Cheryl-station/PostScene"
 
 [project.scripts]
 postscene = "post_scene.cli:main"

@@ -6,6 +6,7 @@ from typing import Any, Dict, Iterable, List, Optional, Set
 
 from ruamel.yaml import YAML
 
+from post_scene.api_document import load_api_document
 from post_scene.parser import Utils
 
 
@@ -38,7 +39,7 @@ def load_yaml(path: Path) -> Dict[str, Any]:
 
 
 def load_postman(path: Path) -> Dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_api_document(str(path))
 
 
 def iter_postman_names(items: Iterable[Dict[str, Any]]) -> Iterable[str]:

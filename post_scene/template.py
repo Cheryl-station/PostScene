@@ -6,6 +6,8 @@ from typing import Any, Dict, Iterable, List, Optional
 
 from ruamel.yaml import YAML
 
+from post_scene.api_document import load_api_document
+
 
 SUPPORTED_METHODS = {"GET", "POST", "PUT", "PATCH", "DELETE"}
 LOGIN_KEYWORDS = ("登录", "登陆", "login", "signin", "auth")
@@ -19,7 +21,7 @@ PAY_KEYWORDS = ("支付", "结算", "pay", "settle", "checkout")
 
 
 def load_postman_collection(path: Path) -> Dict[str, Any]:
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_api_document(str(path))
 
 
 def iter_request_items(items: Iterable[Dict[str, Any]]) -> Iterable[Dict[str, Any]]:
@@ -248,7 +250,8 @@ def build_smart_step(item: Dict[str, Any]) -> Dict[str, Any]:
         }
     elif has_any(text, SEARCH_KEYWORDS) and has_any(text, PRODUCT_KEYWORDS):
         include_value = params.get("goodsName") or params.get("productName") or params.get("name") or "TODO"
-        body.setdefault("pre", {})["ref"] = "canteenId"
+        if has_any(text, CANTEEN_KEYWORDS) or "canteenId" in params:
+            body.setdefault("pre", {})["ref"] = "canteenId"
         body["tests"] = {
             "assert": {
                 "expect": {

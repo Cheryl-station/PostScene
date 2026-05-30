@@ -2,7 +2,7 @@ import json
 import logging
 from pathlib import Path
 from ruamel.yaml import YAML
-import requests
+from post_scene.api_document import load_api_document
 from post_scene.creator import PostmanJson
 from post_scene.parser import Utils, Parse
 
@@ -10,16 +10,11 @@ from post_scene.parser import Utils, Parse
 class PostScene:
     @staticmethod
     def check_postman_url(source: str):
-        """获取 Postman 集合数据（支持 URL 或本地文件）"""
+        """获取接口文档数据（支持 Postman/OpenAPI/Swagger，本地文件或 URL）"""
         try:
-            if source.startswith('http'):
-                resp = requests.get(source, timeout=60)
-                resp.raise_for_status()
-                return resp.json()
-            with open(source, 'r', encoding='utf-8') as f:
-                return json.load(f)
+            return load_api_document(source)
         except Exception as e:
-            logging.error(f"加载 Postman 数据失败: {e}")
+            logging.error(f"加载接口文档失败: {e}")
             return None
 
     @staticmethod
@@ -68,7 +63,7 @@ class PostScene:
         if not postman_data:
             return None
         if 'item' not in postman_data:
-            raise ValueError("Postman collection 缺少 item 字段")
+            raise ValueError("接口文档缺少可用 item 字段")
 
         new_collection = {
             "info": PostmanJson.create_info(script['name']),

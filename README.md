@@ -39,6 +39,8 @@ pip install -U PostScene
 postscene ./src/yaml/demo.yaml ./src/api_document/demo.postman_collection.json -o ./src/scene
 ```
 
+接口文档参数支持 Postman Collection JSON，也支持 Apifox 导出的 OpenAPI/Swagger JSON/YAML。
+
 也可以直接使用模块方式运行：
 
 ```bash
@@ -73,6 +75,12 @@ postscene-lint ./src/yaml/suggested-scenes.yaml ./src/api_document/demo.postman_
 
 ```bash
 postscene-auto ./src/api_document/demo.postman_collection.json -o ./src/scene
+```
+
+如果接口文档来自 Apifox，可以先在 Apifox 中导出 OpenAPI/Swagger，再直接运行：
+
+```bash
+postscene-auto ./src/api_document/apifox-openapi.json -o ./src/scene
 ```
 
 该命令会同时输出推荐 YAML、生成后的 Postman Collection 和自动流程报告。

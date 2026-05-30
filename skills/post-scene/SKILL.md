@@ -1,6 +1,6 @@
 ---
 name: post-scene
-description: Convert API scenario designs written in YAML or XMind into Postman Collection JSON using an existing Postman API document collection. Use when the user asks to generate Postman scenario collections, convert XMind/YAML API flows, validate PostScene scripts, or work with Postman interface automation scenarios.
+description: Convert API scenario designs written in YAML or XMind into Postman Collection JSON using Postman collections or Apifox-exported OpenAPI/Swagger documents. Use when the user asks to generate Postman scenario collections, convert XMind/YAML API flows, validate PostScene scripts, adapt Apifox API documents, or work with interface automation scenarios.
 ---
 
 # PostScene
@@ -9,7 +9,7 @@ Use this skill to help users recommend business-oriented YAML scenarios from Pos
 
 ## Workflow
 
-1. Identify the Postman API document source: a local collection JSON file or a Postman share URL.
+1. Identify the API document source: a Postman Collection JSON, a Postman share URL, or an Apifox-exported OpenAPI/Swagger JSON/YAML file.
 2. Prefer `scripts/postscene_auto.py` when the user wants a complete first pass from a Postman collection.
 3. If the user asks for a useful YAML draft only, generate recommended business scenarios with `scripts/postscene_suggest.py`.
 4. If the user asks only for a neutral skeleton, generate a simple YAML template with `scripts/postscene_template.py`.
@@ -21,7 +21,7 @@ Use this skill to help users recommend business-oriented YAML scenarios from Pos
 
 ## Auto Recommend, Lint, And Convert
 
-Run the full first-pass workflow from a Postman collection:
+Run the full first-pass workflow from a Postman collection or Apifox-exported OpenAPI/Swagger file:
 
 ```bash
 python /path/to/post-scene/scripts/postscene_auto.py \
@@ -39,6 +39,10 @@ python /path/to/post-scene/scripts/postscene_auto.py \
 ```
 
 This command writes a recommended YAML draft, lints it, converts it to a Postman scenario collection when lint passes, and saves a `postscene-auto-report.json` file.
+
+## Apifox Notes
+
+Prefer exporting from Apifox as OpenAPI/Swagger JSON or YAML. The skill normalizes OpenAPI paths into a Postman-like collection internally, using each operation's `summary` or `operationId` as the YAML step name. If users export Apifox as Postman Collection, the existing Postman path works directly.
 
 ## Recommend Business Scenarios
 

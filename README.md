@@ -53,6 +53,14 @@ postscene-template ./src/api_document/demo.postman_collection.json -o ./src/yaml
 
 生成后在模板上调整场景顺序、请求参数、断言和变量提取，再执行 `postscene` 转换。
 
+也可以让工具根据接口名称和路径推荐更接近业务流程的 YAML 场景：
+
+```bash
+postscene-suggest ./src/api_document/demo.postman_collection.json -o ./src/yaml/suggested-scenes.yaml
+```
+
+推荐场景会尝试识别登录、用户信息、搜索、购物车、订单和支付接口，并自动补充常见的变量提取与 `ref` 引用。
+
 #### 作为 Codex Skill 安装
 
 本仓库包含可发布的 Codex skill 包，路径为 `skills/post-scene`。可以从 GitHub 仓库路径安装：

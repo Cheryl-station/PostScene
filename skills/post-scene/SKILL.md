@@ -5,16 +5,38 @@ description: Convert API scenario designs written in YAML or XMind into Postman 
 
 # PostScene
 
-Use this skill to help users draft YAML scenario templates from Postman collections, then turn YAML or XMind API scenario designs into Postman Collection files.
+Use this skill to help users recommend business-oriented YAML scenarios from Postman collections, draft simple YAML templates, then turn YAML or XMind API scenario designs into Postman Collection files.
 
 ## Workflow
 
 1. Identify the Postman API document source: a local collection JSON file or a Postman share URL.
-2. If the user does not already have a scenario script, generate a starter YAML template from the Postman collection with `scripts/postscene_template.py`.
-3. Help the user adjust the generated YAML scenario order, parameters, assertions, and variable extraction.
-4. When a scenario script exists, convert it with `scripts/postscene.py`.
-5. Choose an output directory, defaulting to `./scene` when the user does not specify one.
-6. After conversion, tell the user the generated collection path and any warnings or errors.
+2. If the user asks for a useful first draft, generate recommended business scenarios with `scripts/postscene_suggest.py`.
+3. If the user asks only for a neutral skeleton, generate a simple YAML template with `scripts/postscene_template.py`.
+4. Help the user adjust the generated YAML scenario order, parameters, assertions, variable extraction, and `ref` links.
+5. When a scenario script exists, convert it with `scripts/postscene.py`.
+6. Choose an output directory, defaulting to `./scene` when the user does not specify one.
+7. After conversion, tell the user the generated collection path and any warnings or errors.
+
+## Recommend Business Scenarios
+
+Generate a useful YAML draft from an existing Postman collection:
+
+```bash
+python /path/to/post-scene/scripts/postscene_suggest.py \
+  path/to/postman_collection.json \
+  -o path/to/suggested-scenes.yaml
+```
+
+Limit the number of recommended scenarios:
+
+```bash
+python /path/to/post-scene/scripts/postscene_suggest.py \
+  path/to/postman_collection.json \
+  -o path/to/suggested-scenes.yaml \
+  --max-scenes 2
+```
+
+The recommended YAML tries to identify login, user info, search, cart, order, and payment APIs from interface names and URL paths. It adds common assertions, token/uid extraction for login, and `ref` links such as `canteenId`, `goodsId`, `pocketId`, and `orderId` when the flow can be inferred. Treat the result as an editable first draft, not a guaranteed final test design.
 
 ## Generate A YAML Template
 

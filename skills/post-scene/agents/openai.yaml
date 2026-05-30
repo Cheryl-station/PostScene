@@ -1,0 +1,4 @@
+interface:
+  display_name: "PostScene"
+  short_description: "将XMind或Yaml场景脚本转换为Postman集合"
+  default_prompt: "Use $post-scene to convert a YAML or XMind API scenario into a Postman collection."

@@ -45,6 +45,18 @@ postscene ./src/yaml/demo.yaml ./src/api_document/demo.postman_collection.json -
 python -m post_scene ./src/yaml/demo.yaml ./src/api_document/demo.postman_collection.json -o ./src/scene
 ```
 
+#### 作为 Codex Skill 安装
+
+本仓库包含可发布的 Codex skill 包，路径为 `skills/post-scene`。可以从 GitHub 仓库路径安装：
+
+```bash
+python scripts/install-skill-from-github.py \
+  --repo Cheryl-station/PostScene \
+  --path skills/post-scene
+```
+
+安装后重启 Codex，即可通过 `$post-scene` 调用该技能。
+
 #### Python 调用
 
 ```python

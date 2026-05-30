@@ -45,6 +45,14 @@ postscene ./src/yaml/demo.yaml ./src/api_document/demo.postman_collection.json -
 python -m post_scene ./src/yaml/demo.yaml ./src/api_document/demo.postman_collection.json -o ./src/scene
 ```
 
+如果还没有场景脚本，可以先根据 Postman Collection 生成 YAML 模板：
+
+```bash
+postscene-template ./src/api_document/demo.postman_collection.json -o ./src/yaml/scene-template.yaml
+```
+
+生成后在模板上调整场景顺序、请求参数、断言和变量提取，再执行 `postscene` 转换。
+
 #### 作为 Codex Skill 安装
 
 本仓库包含可发布的 Codex skill 包，路径为 `skills/post-scene`。可以从 GitHub 仓库路径安装：

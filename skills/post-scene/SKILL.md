@@ -5,15 +5,38 @@ description: Convert API scenario designs written in YAML or XMind into Postman 
 
 # PostScene
 
-Use this skill to help users turn YAML or XMind API scenario designs into Postman Collection files.
+Use this skill to help users draft YAML scenario templates from Postman collections, then turn YAML or XMind API scenario designs into Postman Collection files.
 
 ## Workflow
 
-1. Identify the scenario script file: `.yaml`, `.yml`, or `.xmind`.
-2. Identify the Postman API document source: a local collection JSON file or a Postman share URL.
-3. Choose an output directory, defaulting to `./scene` when the user does not specify one.
-4. Prefer the bundled `scripts/postscene.py` command for deterministic conversion.
-5. After conversion, tell the user the generated collection path and any warnings or errors.
+1. Identify the Postman API document source: a local collection JSON file or a Postman share URL.
+2. If the user does not already have a scenario script, generate a starter YAML template from the Postman collection with `scripts/postscene_template.py`.
+3. Help the user adjust the generated YAML scenario order, parameters, assertions, and variable extraction.
+4. When a scenario script exists, convert it with `scripts/postscene.py`.
+5. Choose an output directory, defaulting to `./scene` when the user does not specify one.
+6. After conversion, tell the user the generated collection path and any warnings or errors.
+
+## Generate A YAML Template
+
+Generate a starter scenario file from an existing Postman collection:
+
+```bash
+python /path/to/post-scene/scripts/postscene_template.py \
+  path/to/postman_collection.json \
+  -o path/to/scene-template.yaml
+```
+
+Limit the number of generated steps for a focused draft:
+
+```bash
+python /path/to/post-scene/scripts/postscene_template.py \
+  path/to/postman_collection.json \
+  -o path/to/login-flow.yaml \
+  --scene-name "登录流程" \
+  --limit 5
+```
+
+The generated YAML uses Postman item names as step names, adds a default `status: 200` assertion, and fills `pre.set` from query, form, urlencoded, and JSON body parameters when possible.
 
 ## Command Pattern
 

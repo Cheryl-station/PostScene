@@ -61,6 +61,14 @@ postscene-suggest ./src/api_document/demo.postman_collection.json -o ./src/yaml/
 
 推荐场景会尝试识别登录、用户信息、搜索、购物车、订单和支付接口，并自动补充常见的变量提取与 `ref` 引用。
 
+修改 YAML 后，可以先校验脚本与 Postman Collection 是否匹配：
+
+```bash
+postscene-lint ./src/yaml/suggested-scenes.yaml ./src/api_document/demo.postman_collection.json
+```
+
+校验会检查步骤名是否存在、`ref` 变量是否有前置保存、`next.requestName` 是否能找到，以及基础断言结构是否可识别。
+
 #### 作为 Codex Skill 安装
 
 本仓库包含可发布的 Codex skill 包，路径为 `skills/post-scene`。可以从 GitHub 仓库路径安装：

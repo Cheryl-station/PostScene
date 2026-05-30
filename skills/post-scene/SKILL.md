@@ -13,9 +13,10 @@ Use this skill to help users recommend business-oriented YAML scenarios from Pos
 2. If the user asks for a useful first draft, generate recommended business scenarios with `scripts/postscene_suggest.py`.
 3. If the user asks only for a neutral skeleton, generate a simple YAML template with `scripts/postscene_template.py`.
 4. Help the user adjust the generated YAML scenario order, parameters, assertions, variable extraction, and `ref` links.
-5. When a scenario script exists, convert it with `scripts/postscene.py`.
-6. Choose an output directory, defaulting to `./scene` when the user does not specify one.
-7. After conversion, tell the user the generated collection path and any warnings or errors.
+5. Before converting, lint the YAML against the Postman collection with `scripts/postscene_lint.py`.
+6. When a scenario script is valid enough to proceed, convert it with `scripts/postscene.py`.
+7. Choose an output directory, defaulting to `./scene` when the user does not specify one.
+8. After conversion, tell the user the generated collection path and any warnings or errors.
 
 ## Recommend Business Scenarios
 
@@ -37,6 +38,27 @@ python /path/to/post-scene/scripts/postscene_suggest.py \
 ```
 
 The recommended YAML tries to identify login, user info, search, cart, order, and payment APIs from interface names and URL paths. It adds common assertions, token/uid extraction for login, and `ref` links such as `canteenId`, `goodsId`, `pocketId`, and `orderId` when the flow can be inferred. Treat the result as an editable first draft, not a guaranteed final test design.
+
+## Lint A Scenario
+
+Check a YAML scenario before converting it:
+
+```bash
+python /path/to/post-scene/scripts/postscene_lint.py \
+  path/to/scene.yaml \
+  path/to/postman_collection.json
+```
+
+Use strict mode in CI or before final conversion:
+
+```bash
+python /path/to/post-scene/scripts/postscene_lint.py \
+  path/to/scene.yaml \
+  path/to/postman_collection.json \
+  --strict
+```
+
+The linter checks whether YAML step names exist in the Postman collection, whether `ref` variables were saved by earlier steps, whether `next.requestName` points to a known YAML step, and whether assertion types are recognized. Warnings mean the file may still convert but needs review; errors should be fixed first.
 
 ## Generate A YAML Template
 

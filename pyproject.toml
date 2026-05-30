@@ -25,6 +25,7 @@ Repository = "https://github.com/yajuntang/PostScene"
 postscene = "post_scene.cli:main"
 postscene-template = "post_scene.template:main"
 postscene-suggest = "post_scene.template:suggest_main"
+postscene-lint = "post_scene.lint:main"
 
 [tool.setuptools]
 include-package-data = true
